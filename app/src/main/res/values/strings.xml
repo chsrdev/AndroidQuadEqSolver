@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Quadratic Equation Solver</string>
+    <string name="a_coefficient">A</string>
+    <string name="b_coefficient">B</string>
+    <string name="c_coefficient">C</string>
+    <string name="solve">Solve</string>
+    <string name="a_coefficient_0_error">A Coefficient can\'t be 0!</string>
+    <string name="no_roots">No roots</string>
+    <string name="any_x">Any x</string>
+</resources>
