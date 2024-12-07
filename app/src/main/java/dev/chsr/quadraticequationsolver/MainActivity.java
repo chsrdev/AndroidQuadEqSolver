@@ -1,6 +1,7 @@
 package dev.chsr.quadraticequationsolver;
 
 import android.graphics.Color;
+import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     EditText cCoefficientInput;
     Button solveButton;
     TextView rootsText;
+    TextView equationText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         cCoefficientInput = findViewById(R.id.cCoefficientInput);
         solveButton = findViewById(R.id.solveButton);
         rootsText = findViewById(R.id.resultText);
+        equationText = findViewById(R.id.equationText);
+        DecimalFormat df = new DecimalFormat("#.###");
 
         solveButton.setOnClickListener(view -> {
             String strA = aCoefficientInput.getText().toString(),
@@ -37,12 +41,6 @@ public class MainActivity extends AppCompatActivity {
                     b = parseCoefficient(strB),
                     c = parseCoefficient(strC);
 
-            if (a < 0) {
-                a /= -1;
-                b /= -1;
-                c /= -1;
-            }
-
             if (a == 0 && b == 0 && c == 0)
                 rootsText.setText(R.string.any_x);
             else if (a == 0 && b == 0)
@@ -50,25 +48,37 @@ public class MainActivity extends AppCompatActivity {
             else if ((a == 0 && c == 0) || (b == 0 && c == 0))
                 rootsText.setText("x = 0");
             else if (a == 0)
-                rootsText.setText(String.format(Locale.US, "x = %f", -c / b));
+                rootsText.setText(String.format(Locale.US, "x = %s", df.format(-c / b)));
             else if (b == 0) {
-                double root = Math.sqrt(-c / a);
-                rootsText.setText(String.format(Locale.US, "x₁ = %f\nx₂ = %f", root, -root));
+                if (-c/a<0) rootsText.setText(R.string.no_roots);
+                else {
+                    double root = Math.sqrt(-c / a);
+                    rootsText.setText(String.format(Locale.US, "x₁ = %s\nx₂ = %s", df.format(root), df.format(-root)));
+                }
             } else if (c == 0)
-                rootsText.setText(String.format(Locale.US, "x = %f", -b / a));
+                rootsText.setText(String.format(Locale.US, "x = %s", df.format(-b / a)));
             else {
                 double d = Math.pow(b, 2) - (4 * a * c);
                 if (d > 0) {
                     double x1 = (-b + Math.sqrt(d)) / (2 * a);
                     double x2 = (-b - Math.sqrt(d)) / (2 * a);
-                    Log.i("sqrtD", String.format("%f %f %f %f", a,b,c,d));
-                    rootsText.setText(String.format(Locale.US, "x₁ = %f\nx₂ = %f", x1, x2));
+                    Log.i("sqrtD", String.format("%f %f %f %f", a, b, c, d));
+                    rootsText.setText(String.format(Locale.US, "x₁ = %s\nx₂ = %s", df.format(x1), df.format(x2)));
                 } else if (d == 0) {
-                    rootsText.setText(String.format(Locale.US, "x = %f", -b / (2*a)));
+                    rootsText.setText(String.format(Locale.US, "x = %s", df.format(-b / (2 * a))));
                 } else {
                     rootsText.setText(R.string.no_roots);
                 }
             }
+            String str = "";
+            if (a != 0) str = String.format(Locale.US, "%sx²", df.format(a));
+            if (b != 0)
+                str += String.format(Locale.US, (a != 0 ? (b < 0 ? " - " : " + ") : "") + "%sx", df.format(b<0&&a!=0?-b:b));
+            if (c != 0)
+                str += String.format(Locale.US, (a != 0 || b != 0 ? (c < 0 ? " - " : " + ") : "") + "%s", df.format(c<0&&(a!=0||b!=0)?-c:c));
+            if (a == 0 && b == 0 && c == 0) str = "0";
+            str += " = 0";
+            equationText.setText(str);
 
             aCoefficientInput.clearFocus();
             bCoefficientInput.clearFocus();
