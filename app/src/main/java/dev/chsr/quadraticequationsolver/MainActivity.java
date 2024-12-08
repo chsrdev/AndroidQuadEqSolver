@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             else if (a == 0)
                 rootsText.setText(String.format(Locale.US, "x = %s", df.format(-c / b)));
             else if (b == 0) {
-                if (-c/a<0) rootsText.setText(R.string.no_roots);
+                if (-c / a < 0) rootsText.setText(R.string.no_roots);
                 else {
                     double root = Math.sqrt(-c / a);
                     rootsText.setText(String.format(Locale.US, "x₁ = %s\nx₂ = %s", df.format(root), df.format(-root)));
@@ -73,9 +73,17 @@ public class MainActivity extends AppCompatActivity {
             String str = "";
             if (a != 0) str = String.format(Locale.US, "%sx²", df.format(a));
             if (b != 0)
-                str += String.format(Locale.US, (a != 0 ? (b < 0 ? " - " : " + ") : "") + "%sx", df.format(b<0&&a!=0?-b:b));
+                str += String.format(
+                        Locale.US,
+                        (a != 0 ? (b < 0 ? " - " : " + ") : "") + "%sx",
+                        df.format(b < 0 && a != 0 ? -b : b)
+                );
             if (c != 0)
-                str += String.format(Locale.US, (a != 0 || b != 0 ? (c < 0 ? " - " : " + ") : "") + "%s", df.format(c<0&&(a!=0||b!=0)?-c:c));
+                str += String.format(
+                        Locale.US,
+                        (a != 0 || b != 0 ? (c < 0 ? " - " : " + ") : "") + "%s",
+                        df.format(c < 0 && (a != 0 || b != 0) ? -c : c)
+                );
             if (a == 0 && b == 0 && c == 0) str = "0";
             str += " = 0";
             equationText.setText(str);
