@@ -1,9 +1,12 @@
 package dev.chsr.quadraticequationsolver;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -55,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     double root = Math.sqrt(-c / a);
                     rootsText.setText(String.format(Locale.US, "x₁ = %s\nx₂ = %s", df.format(root), df.format(-root)));
                 }
-            } else if (c == 0)
-                rootsText.setText(String.format(Locale.US, "x = %s", df.format(-b / a)));
+            }
             else {
                 double d = Math.pow(b, 2) - (4 * a * c);
                 if (d > 0) {
